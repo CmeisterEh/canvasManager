@@ -106,9 +106,6 @@ class canvasManager:
 
 
 
-
-
-
     def insert(self, event):
         ''' Activated when a new widget is inserted into the canvas. Ensures
         the widget is added to the list. Preforms all instantiation operations
