@@ -106,6 +106,9 @@ class canvasManager:
 
 
 
+
+
+
     def insert(self, event):
         ''' Activated when a new widget is inserted into the canvas. Ensures
         the widget is added to the list. Preforms all instantiation operations
@@ -141,7 +144,7 @@ class canvasManager:
 
             if self.justification == "ne":
                 ymax = ymin + (ymax - ymin)                                  # bbox seems to be out by a pixel or two
-                Xnext = xmin
+                Xnext = xmax
                 Ynext = ymax + self.Buffer[1]
 
 
@@ -159,7 +162,7 @@ class canvasManager:
             self.update()
 
             if debugging == True: print("insert complete" )
-            #self.Canvas.coords(subCanvas_Window, [Xnext, Ynext])
+
             if debugging == True: print("subcanvas position: ", self.Canvas.bbox(subCanvas_Window))
 
 
@@ -254,7 +257,7 @@ class canvasManager:
             currentWidget = currentWidgetEntry[1]                             # handler to the current widget
             self.Canvas.itemconfig(currentWidget, anchor = self.justification)
 
-            if debugging == True: print("Current Position: ", currentWidgetEntry[2])
+            if debugging == True: print("Current Position: ", currentWidgetEntry[3])
 
             if index == 0:                                                     # First Widget Special Case
                 X = currentWidgetEntry[3][0]                                   # Return X Buffer Distance
@@ -304,24 +307,19 @@ class canvasManager:
 
                 self.Canvas.coords(currentWidget, new_X, new_Y)
 
-                self.listofCanvas[index][2] = position
+                self.listofCanvas[index][3] = position
+
+                if debugging == True: print("Position of ", index, ": ", position)
 
             if debugging == True: print("Update Complete")
 
             index = index + 1
-
-
-
-
-
         pass
 
     def createNew(self, subCanvas, subCanvas_Window):
         ''' Create a new widget, endow the widget with all of the desired
         properties using this method. '''
         listofproperties = []
-
-
         feature = CanvasInsertDelete([], subCanvas, self.Root)                 # Each Canvas Object is a CanvasInsertDelete Object
         listofproperties.append(feature)
         #feature = ToolTip(subCanvas, text = "Right Click bring up popup menu") # Tooltip Popup upon mouseover
@@ -349,6 +347,12 @@ class canvasManager:
 
     def PopupMenu_feature(self, Widget):
         Widget.bind("<Button-3>", self.PopupMenu_update, add = '+')
+
+
+    def configUpdate(self, justification):
+        self.justification = justification
+        self.update()
+
 
     def PopupMenu_update(self, event = None  ):
 
